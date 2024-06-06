@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 
 export default function Form() {
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const [formData, setFormData] = useState({
     leaderName: "",
     fatherName: "",
@@ -84,18 +85,26 @@ export default function Form() {
     setRows(rows.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async() => {
-    const data={...formData,rows:rows};
-    const res=await axios.post("http://localhost:5000/",data);  
-    console.log(res);
+  const handleSubmit = async () => {
+    try {
+      const data = { ...formData, rows: rows };
+      const res = await axios.post(`${BASE_URL}/form`, data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
-    const getData=async()=>{
-      const res=await axios.get("http://localhost:5000/");
-      console.log(res);
-    }
+    const getData = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/form`);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getData();
-  },[])
+  }, []);
 
   return (
     <div className="border border-black flex flex-col gap-2 p-4 sm:w-[80%]">
