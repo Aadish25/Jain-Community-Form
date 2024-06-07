@@ -461,7 +461,7 @@ export default function Form() {
       <div className="text-center w-[100%]">
         <button
           onClick={handleSubmit}
-          className="btn bg-green-500 w-[20%] mt-5"
+          className="btn bg-green-500 sm:w-[20%] mt-5"
         >
           Submit
         </button>
