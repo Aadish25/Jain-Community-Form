@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { handleOpen } from "../reducers/snackbar/snackbar";
+import { useDispatch } from "react-redux";
 
 export default function Form() {
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     leaderName: "",
     fatherName: "",
@@ -87,25 +90,16 @@ export default function Form() {
 
   const handleSubmit = async () => {
     try {
+      if(!formData.leaderName || !formData.fatherName || !formData.gotra || !formData.address || !formData.originalResident || !formData.profession || !formData.officeAddress || !formData.mobileNumber || !formData.email || !formData.achievement) {
+         return dispatch(handleOpen({ message: "Please fill all the fields", severity: "error" }));
+      }
       const data = { ...formData, rows: rows };
       const res = await axios.post(`${BASE_URL}/form`, data);
-      console.log(res);
+      dispatch(handleOpen({ message: res.data.message, severity: "success" }));
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/form`);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getData();
-  }, []);
-
   return (
     <div className="border border-black flex flex-col gap-2 p-4 sm:w-[80%]">
       <div className="flex flex-col gap-4">
